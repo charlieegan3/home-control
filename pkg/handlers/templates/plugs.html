@@ -1,0 +1,39 @@
+{{define "title"}}Control - Plugs{{end}}
+{{define "content"}}
+
+
+<div class="center mw7 pa3 pa0-ns" hx-ext="ws" ws-connect="/plugs/websocket">
+    <div class="mb3" hx-boost="true">
+        <a href="/" class="bg-orange no-underline white ph3 pv2 grow b--washed-red ba bw2">Home</a>
+    </div>
+    <div>
+        Total: <span id="total" class="silver">Unknown</span>
+    </div>
+    {{range .Groups}}
+        <h2>{{ .Name }}</h2>
+        <div>
+            Total: <span id="group-{{.ID}}" class="silver">Unknown</span>
+        </div>
+        <div class="bt b--silver">
+            {{ range .Plugs }}
+            {{ $plug := index $.Plugs . }}
+            <div class="flex justify-between">
+                <div class="w-30">{{ $plug.Name }} </div>
+                <div class="w-25"><code class="silver f6">{{$plug.ID}}</code></div>
+                <div class="w-20">
+                    <span id="{{ $plug.ID }}">Unknown</span>
+                </div>
+                <form ws-send>
+                    <input type="hidden" name="id" value="{{ $plug.ID }}" />
+                    <button class="w-100 {{ if not $plug.Enabled }}hidden{{end}}"
+                            type="submit" {{ if not $plug.Enabled }}disabled{{end}}>
+                        Toggle
+                    </button>
+                </form>
+            </div>
+            {{end}}
+        </divclass>
+    {{end}}
+</div>
+
+{{end}}
